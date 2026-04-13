@@ -202,22 +202,35 @@ Observation de decoupage : `Reservation`, `Room` et les repositories sont aujour
 
 ### Scenario A — Politique de menage
 
-- Fichiers modifies : ...
-- Modules impactes : ...
-- Principe en jeu : ...
+- Fichiers modifies : `1` (`Hotel.Housekeeping/HousekeepingModule.cs`)
+- Modules impactes : `1` (`Hotel.Housekeeping`)
+- Principe en jeu : `CCP`  
+  Le changement de frequence de menage ne touche que le module qui porte les regles de housekeeping.
 
 ### Scenario B — Taux de TVA
 
-- Fichiers modifies : ...
-- Modules impactes : ...
+- Fichiers modifies : `1` (`Hotel.Billing/BillingModule.cs`)
+- Modules impactes : `1` (`Hotel.Billing`)
 
 ### Scenario C — Push notification
 
-- Fichiers crees : ...
-- Fichiers modifies : ...
-- Modules metier impactes : ...
-- Principe en jeu : ...
+- Fichiers crees : `1` (`Hotel.Infrastructure/ConfirmationSenders.cs`)
+- Fichiers modifies : `1` (`Hotel.Infrastructure/ServiceRegistration.cs`)
+- Modules metier impactes : `aucun`
+- Principe en jeu : `Ports & Adapters`  
+  Le module `Booking` depend d'un port `IBookingConfirmationSender`. On ajoute donc un nouvel adapter push et un adapter composite dans l'infrastructure, sans modifier le coeur metier.
 
 ### Comparaison avec le code de depart
 
-(Paragraphe d'analyse)
+Dans la solution modulee, les scenarios A et B ne touchent chacun qu'un seul fichier d'un seul module metier. C'est exactement l'effet recherche par `CCP` : ce qui change ensemble vit ensemble. Le scenario C confirme le benefice des `Ports & Adapters` : on etend un comportement technique dans `Hotel.Infrastructure` sans modifier `Hotel.Booking`, `Hotel.Billing` ou `Hotel.Housekeeping`.
+
+### Effets observes apres modification
+
+- Avec la TVA a `12 %`, la facture de Bob passe de `1,869.00` a `1,902.60`.
+- Avec un changement de draps tous les `2 jours`, le planning du `18 juin 2025` n'est plus le meme qu'avant.
+- Avec le canal push ajoute, chaque confirmation de reservation part maintenant en `email + push`.
+
+### Analyse
+
+- Le principe qui garantit que le scenario A ne touche qu'un seul module est `CCP` (`Common Closure Principle`).
+- Le principe qui garantit que le scenario C n'impacte pas les modules metier est `Ports & Adapters` : le metier depend d'un port, et seul l'adapter concret change.

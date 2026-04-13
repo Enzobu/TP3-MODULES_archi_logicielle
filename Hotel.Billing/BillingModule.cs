@@ -62,7 +62,7 @@ internal sealed class InvoiceGenerator
                     Description = $"{reservation.Nights} night(s) × {nightRate:C}/night",
                     Amount = subtotal
                 },
-                new() { Description = "TVA (10%)", Amount = tva },
+                new() { Description = "TVA (12%)", Amount = tva },
                 new()
                 {
                     Description =
@@ -76,7 +76,7 @@ internal sealed class InvoiceGenerator
 
 internal sealed class TaxCalculator
 {
-    private const decimal AccommodationTvaRate = 0.10m;
+    private const decimal AccommodationTvaRate = 0.12m;
     private const decimal TouristTaxPerPersonPerNight = 1.50m;
 
     public decimal CalculateTva(decimal subtotal) => subtotal * AccommodationTvaRate;

@@ -22,7 +22,9 @@ public static class ServiceRegistration
             serviceProvider.GetRequiredService<InMemoryReservationStore>());
 
         services.AddSingleton<IBillingDataSource, InMemoryBillingDataSource>();
-        services.AddSingleton<IBookingConfirmationSender, EmailConfirmationSender>();
+        services.AddSingleton<EmailConfirmationSender>();
+        services.AddSingleton<PushConfirmationSender>();
+        services.AddSingleton<IBookingConfirmationSender, MultiChannelBookingConfirmationSender>();
         services.AddSingleton<ICleaningTaskNotifier, SmsCleaningNotifier>();
 
         return services;
