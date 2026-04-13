@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+    <Reference Include="Hotel.Booking.Contracts">
+      <HintPath>..\Hotel.Booking.Contracts\bin\Debug\net8.0\Hotel.Booking.Contracts.dll</HintPath>
+    </Reference>
+    <Reference Include="Hotel.Billing.Contracts">
+      <HintPath>..\Hotel.Billing.Contracts\bin\Debug\net8.0\Hotel.Billing.Contracts.dll</HintPath>
+    </Reference>
+    <Reference Include="Hotel.Housekeeping.Contracts">
+      <HintPath>..\Hotel.Housekeeping.Contracts\bin\Debug\net8.0\Hotel.Housekeeping.Contracts.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+</Project>

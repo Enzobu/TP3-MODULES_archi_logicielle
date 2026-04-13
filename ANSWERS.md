@@ -165,13 +165,36 @@ Observation de decoupage : `Reservation`, `Room` et les repositories sont aujour
 
 | Module | Justification |
 |-------|---------------|
-| ... | ... |
+| `Hotel.Booking.Contracts` | Contrats publics du module reservation : port primaire `IBookingService`, ports secondaires vers l'infrastructure (`IReservationStore`, `IRoomInventory`, `IBookingConfirmationSender`) et DTOs (`BookingRequest`, `ReservationView`, `RoomView`, `RoomType`). |
+| `Hotel.Booking` | Implementation interne du module reservation : `BookingService`, `RoomAssigner`, orchestration des reservations et `ServiceRegistration`. |
+| `Hotel.Billing.Contracts` | Contrats publics du module facturation : `IBillingService`, port secondaire `IBillingDataSource` et DTOs de facture / lecture (`BillingReservation`, `BillingRoom`, `Invoice`, `InvoiceLine`). |
+| `Hotel.Billing` | Implementation interne du module facturation : `BillingService`, `InvoiceGenerator`, `TaxCalculator`, strategies de prix, `ServiceRegistration`. |
+| `Hotel.Housekeeping.Contracts` | Contrats publics du module housekeeping : `IHousekeepingService`, ports secondaires (`IHousekeepingScheduleDataSource`, `ICleaningTaskNotifier`) et DTOs (`HousekeepingReservation`, `CleaningTask`). |
+| `Hotel.Housekeeping` | Implementation interne du module housekeeping : `HousekeepingService`, policies de nettoyage, `ServiceRegistration`. |
+| `Hotel.Infrastructure` | Adapters concrets : stockage in-memory, adaptation des donnees booking vers billing/housekeeping, email de confirmation et SMS de menage. |
+| `Hotel.Runner` | Composition root console. C'est lui qui cable les modules, enregistre les adapters et joue le scenario de demonstration. |
 
 ### Justification par principe
 
-- **CCP** : (expliquez pourquoi vous avez regroupe certaines classes)
-- **CRP** : (expliquez pourquoi vous avez separe certaines classes)
-- **REP** : (expliquez la coherence de chaque module)
+- **CCP** : j'ai regroupe dans `Hotel.Booking` tout ce qui change quand les regles de reservation evoluent, dans `Hotel.Billing` tout ce qui change quand les regles tarifaires/fiscales evoluent, et dans `Hotel.Housekeeping` tout ce qui change quand la planification du menage evolue. Les adapters techniques changent pour d'autres raisons, donc ils sont dans `Hotel.Infrastructure`.
+- **CRP** : j'ai separe les contrats publics dans `*.Contracts` pour que les consommateurs dependent uniquement des ports et DTOs utiles. `Billing` et `Housekeeping` ne dependent plus du modele interne de `Booking` et n'embarquent plus des details de reservation qu'ils n'utilisent pas.
+- **REP** : chaque module est coherent et publiable independamment : un package reservation, un package facturation, un package housekeeping, plus un package d'infrastructure. Chaque `Contracts` represente la surface de reutilisation stable du module.
+
+### Regles de visibilite appliquees
+
+- Tous les types d'implementation des modules metier sont `internal`.
+- Les seuls types publics des modules metier sont dans les projets `*.Contracts`.
+- Les `ServiceRegistration` sont publics pour permettre au runner de faire le cablage DI.
+- `Billing` et `Housekeeping` ne partagent pas l'entite `Reservation` de `Booking` : chacun consomme sa propre vue (`BillingReservation`, `HousekeepingReservation`).
+
+### Dependances entre projets
+
+- `Hotel.Booking` reference uniquement `Hotel.Booking.Contracts`.
+- `Hotel.Billing` reference uniquement `Hotel.Billing.Contracts`.
+- `Hotel.Housekeeping` reference uniquement `Hotel.Housekeeping.Contracts`.
+- Aucun module metier d'implementation ne reference un autre module metier.
+- `Hotel.Infrastructure` reference les contrats pour implementer les ports.
+- `Hotel.Runner` joue le role de composition root et cable les modules/adapters.
 
 ---
 

@@ -1,0 +1,33 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+    <Reference Include="Hotel.Booking.Contracts">
+      <HintPath>..\Hotel.Booking.Contracts\bin\Debug\net8.0\Hotel.Booking.Contracts.dll</HintPath>
+    </Reference>
+    <Reference Include="Hotel.Booking">
+      <HintPath>..\Hotel.Booking\bin\Debug\net8.0\Hotel.Booking.dll</HintPath>
+    </Reference>
+    <Reference Include="Hotel.Billing.Contracts">
+      <HintPath>..\Hotel.Billing.Contracts\bin\Debug\net8.0\Hotel.Billing.Contracts.dll</HintPath>
+    </Reference>
+    <Reference Include="Hotel.Billing">
+      <HintPath>..\Hotel.Billing\bin\Debug\net8.0\Hotel.Billing.dll</HintPath>
+    </Reference>
+    <Reference Include="Hotel.Housekeeping.Contracts">
+      <HintPath>..\Hotel.Housekeeping.Contracts\bin\Debug\net8.0\Hotel.Housekeeping.Contracts.dll</HintPath>
+    </Reference>
+    <Reference Include="Hotel.Housekeeping">
+      <HintPath>..\Hotel.Housekeeping\bin\Debug\net8.0\Hotel.Housekeeping.dll</HintPath>
+    </Reference>
+    <Reference Include="Hotel.Infrastructure">
+      <HintPath>..\Hotel.Infrastructure\bin\Debug\net8.0\Hotel.Infrastructure.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+</Project>
